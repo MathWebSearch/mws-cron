@@ -1,5 +1,7 @@
 # mws-cron
 
+[![Build Status](https://travis-ci.org/MathWebSearch/mws-cron.svg?branch=master)](https://travis-ci.org/MathWebSearch/mws-cron)
+
 A Docker Container responsible for automatically updating a MathWebSearch instance.  
 
 ## Building
