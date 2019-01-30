@@ -15,7 +15,7 @@ func RestartContainers(filters filters.Args, timeout *time.Duration) (err error)
 
 	// find all the matching containers
 	var containers []types.Container
-	if containers, err = dockerClient.ContainerList(ctx, types.ContainerListOptions{Filters: filters}); err != nil {
+	if containers, err = dockerClient.ContainerList(ctx, types.ContainerListOptions{Filters: filters, All: true}); err != nil {
 		return
 	}
 

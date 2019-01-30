@@ -18,12 +18,12 @@ func SpawnWithOwnVolumes(image string, cmd []string) (waitBody container.Contain
 	// create context and configuration
 	ctx := context.Background()
 	createConfig := container.Config{
-		Image:   image,
-		Cmd:     cmd,
-		Volumes: info.Config.Volumes,
+		Image: image,
+		Cmd:   cmd,
 	}
 	hostConfig := container.HostConfig{
-		AutoRemove: true,
+		AutoRemove:  true,
+		VolumesFrom: []string{info.ID},
 	}
 
 	// and run in the foreground
