@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -19,6 +20,7 @@ func main() {
 }
 
 func mainCron() {
+	fmt.Printf("Cron: Using pidfile %s\n", pidFile)
 	// write the pidfile
 	if cron.WritePid(pidFile) != nil {
 		panic("Can't write pidfile")
