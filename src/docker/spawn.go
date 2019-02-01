@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/network"
 )
 
 // SpawnWithOwnVolumes spawns a new docker container with the same volumes as the current container
@@ -26,6 +27,20 @@ func SpawnWithOwnVolumes(image string, cmd []string) (waitBody container.Contain
 		VolumesFrom: []string{info.ID},
 	}
 
+	networkConfig := network.NetworkingConfig{
+		// EndpointsConfig: duplicateNetworkConfig(&info.NetworkSettings.Networks),
+	}
+
 	// and run in the foreground
-	return StartForeground(ctx, &createConfig, &hostConfig, nil, "", os.Stdout, os.Stderr)
+	return StartForeground(ctx, &createConfig, &hostConfig, &networkConfig, "", os.Stdout, os.Stderr)
+}
+
+// duplicateNetworkConfig copies the names of networks from old to new
+func duplicateNetworkConfig(old *map[string]*network.EndpointSettings) (new map[string]*network.EndpointSettings) {
+	for name, ep := range *old {
+		new[name] = &network.EndpointSettings{
+			NetworkID: ep.NetworkID,
+		}
+	}
+	return
 }
