@@ -33,7 +33,7 @@ func mainCron() {
 	minute := 1 * time.Minute
 	cron.RunCron(cronLine, func(reason cron.Reason, retry func()) {
 		docker.UpdateMWS(mwsLabel, retry, &minute)
-	}, true, true)
+	}, true, shouldRunInitial)
 }
 
 func mainTrigger() {
@@ -52,11 +52,13 @@ var pidFile string
 var mwsLabel string
 var cronLine string
 var shouldTrigger bool
+var shouldRunInitial bool
 
 func init() {
 	flag.BoolVar(&shouldTrigger, "trigger", false, "Trigger manually running a cron job in running instance")
+	flag.BoolVar(&shouldRunInitial, "initial", true, "Run re-indexing on startup")
 	flag.StringVar(&pidFile, "pidfile", "", "Pidfile to use")
-	flag.StringVar(&cronLine, "schedule", "@midnight", "Cronline representing time to run job on")
+	flag.StringVar(&cronLine, "schedule", "@midnight", "Cronline representing time to run job on, use '@never' to disable cronjobs. ")
 	flag.StringVar(&mwsLabel, "label", "org.mathweb.mwsd", "Label for MathWebSearch daemon")
 	flag.Parse()
 

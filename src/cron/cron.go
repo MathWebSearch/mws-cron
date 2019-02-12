@@ -51,10 +51,12 @@ func RunCron(cronLine string, code Task, allowSignals bool, runInitial bool) boo
 	var entryID cron.EntryID
 	var err error
 
-	entryID, err = c.AddFunc(cronLine, func() {
-		fmt.Printf("Cron: Running regular job, next scheduled at %s\n", c.Entry(entryID).Next.Format(time.RFC3339))
-		quenueCronTask(mutex, code, Scheduled)
-	})
+	if cronLine != "" && cronLine != "@never" {
+		entryID, err = c.AddFunc(cronLine, func() {
+			fmt.Printf("Cron: Running regular job, next scheduled at %s\n", c.Entry(entryID).Next.Format(time.RFC3339))
+			quenueCronTask(mutex, code, Scheduled)
+		})
+	}
 
 	if err != nil {
 		return false
