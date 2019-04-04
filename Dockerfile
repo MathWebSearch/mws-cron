@@ -12,4 +12,5 @@ RUN make build-local
 FROM scratch
 COPY --from=builder /go/src/github.com/MathWebSearch/mws-cron/out/mws-cron /mws-cron
 
+ENV MWS_CRON_SCHEDULE @never
 ENTRYPOINT [ "/mws-cron"]

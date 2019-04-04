@@ -58,7 +58,7 @@ func init() {
 	flag.BoolVar(&shouldTrigger, "trigger", false, "Trigger manually running a cron job in running instance")
 	flag.BoolVar(&shouldRunInitial, "initial", true, "Run re-indexing on startup")
 	flag.StringVar(&pidFile, "pidfile", "", "Pidfile to use")
-	flag.StringVar(&cronLine, "schedule", "@midnight", "Cronline representing time to run job on, use '@never' to disable cronjobs. ")
+	flag.StringVar(&cronLine, "schedule", getenv("MWS_CRON_SCHEDULE", "@midnight"), "Cronline representing time to run job on, use '@never' to disable cronjobs, can also be set using the 'MWS_CRON_SCHEDULE' environment variable")
 	flag.StringVar(&mwsLabel, "label", "org.mathweb.mwsd", "Label for MathWebSearch daemon")
 	flag.Parse()
 
@@ -70,4 +70,12 @@ func init() {
 		}
 		pidFile = filepath.Join(dir, "mws-cron.pid")
 	}
+}
+
+func getenv(key, fallback string) string {
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		return fallback
+	}
+	return value
 }
